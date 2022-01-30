@@ -34,13 +34,16 @@ namespace DoubTech.AnimalAI.Agent
 
         private void Update()
         {
+            if (!player) return;
+            
             if (Time.time - lastUpdate > updateSeconds)
             {
+                lastUpdate = Time.time;
                 if (Vector3.Distance(player.position, transform.position) < spawnDistance)
                 {
                     if (instances.Count < instanceCount)
                     {
-                        if (TerrainUtilities.GetRandomPositionOnTerrain(transform.position, spawnRadius,
+                        if (TerrainUtilities.GetRandomPosition(transform.position, spawnRadius,
                                 out var position))
                         {
                             var rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
@@ -59,6 +62,9 @@ namespace DoubTech.AnimalAI.Agent
         private void OnEnable()
         {
             instanceCount = Random.Range(instanceCountRange.x, instanceCountRange.y + 1);
+
+            if (!player) player = GameObject.FindWithTag("Player")?.transform;
+            if (!player) player = Camera.current.transform;
         }
 
         private void OnDrawGizmos()

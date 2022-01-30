@@ -9,6 +9,32 @@ namespace DoubTech.AnimalAI.Utilities
             return GetRandomPositionOnTerrain(center, radius, out position, out var terrain);
         }
 
+        public static bool GetRandomPosition(Vector3 center, float radius, out Vector3 position)
+        {
+            var circlePos = Random.insideUnitCircle * radius;
+            position = center;
+            position.x += circlePos.x;
+            position.z += circlePos.y;
+            position.y = center.y + 1000;
+            if (Physics.Raycast(position, Vector3.down, out var hit))
+            {
+                position.y = hit.point.y;
+                return true;
+            }
+            else
+            {
+                var terrain = GetClosestCurrentTerrain(position);
+                var validator = terrain.GetComponent<ITerrainValidator>();
+                if (null != validator && validator.IsValid || null == validator && terrain)
+                {
+                    position.y = terrain.SampleHeight(position) + terrain.transform.position.y;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public static bool GetRandomPositionOnTerrain(Vector3 center, float radius, out Vector3 position, out Terrain terrain)
         {
             var circlePos = Random.insideUnitCircle * radius;
@@ -42,14 +68,14 @@ namespace DoubTech.AnimalAI.Utilities
             float lowDist = (terrains[0].GetPosition() - agentPosition).sqrMagnitude;
             var terrainIndex = 0;
 
-            for (int i = 1; i < terrains.Length && terrains[i].enabled && terrains[i].gameObject.activeInHierarchy; i++)
+            for (int i = 1; i < terrains.Length; i++)
             {
                 Terrain terrain = terrains[i];
                 Vector3 terrainPos = terrain.GetPosition();
 
                 //Find the distance and check if it is lower than the last one then store it
                 var dist = (terrainPos - agentPosition).sqrMagnitude;
-                if (dist < lowDist)
+                if (dist < lowDist && terrains[i].enabled && terrains[i].gameObject.activeInHierarchy)
                 {
                     lowDist = dist;
                     terrainIndex = i;
