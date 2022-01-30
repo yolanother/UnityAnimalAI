@@ -1,6 +1,10 @@
 {
-    "name": "DoubTech.AnimalAI.Editor",
+    "name": "DoubTech.AiAnimals.AStarPro",
     "rootNamespace": "",
+    "references": [
+        "GUID:efa45043feb7e4147a305b73b5cea642",
+        "GUID:4ca662d35244dc44c949760b3e9e44b9"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

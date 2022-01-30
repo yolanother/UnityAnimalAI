@@ -1,6 +1,10 @@
 {
-    "name": "DoubTech.AnimalAI.Editor",
+    "name": "DoubTech.AnimalAI.NodeCanvas",
     "rootNamespace": "",
+    "references": [
+        "GUID:4ca662d35244dc44c949760b3e9e44b9",
+        "GUID:b134867f3cd9e37428b652f97bf28b72"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
