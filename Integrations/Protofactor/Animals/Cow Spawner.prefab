@@ -12,6 +12,10 @@ PrefabInstance:
       value: Cow Spawner
       objectReference: {fileID: 0}
     - target: {fileID: 4377159930341342446, guid: f6cefe5cfd247b04ba5e12b5563c276f, type: 3}
+      propertyPath: spawnDistance
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4377159930341342446, guid: f6cefe5cfd247b04ba5e12b5563c276f, type: 3}
       propertyPath: prefabs.Array.size
       value: 1
       objectReference: {fileID: 0}

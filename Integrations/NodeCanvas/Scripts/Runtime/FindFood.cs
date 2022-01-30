@@ -16,6 +16,7 @@ namespace DoubTech.AnimalAI.Integrations.NodeCanvas
         public BBParameter<bool> run = false;
         public BBParameter<float> radius = 20;
         public BBParameter<float> wanderFailureTimeout = 5;
+        public BBParameter<float> stoppingDistanceToFood = 2;
 
         private bool pathPending;
         private bool hasValidDestination;
@@ -67,33 +68,27 @@ namespace DoubTech.AnimalAI.Integrations.NodeCanvas
 
         protected override void OnUpdate()
         {
+            if (!hasValidDestination) return;
             base.OnUpdate();
-
-            if (!pathPending)
+            
+            if (agent.ReachedDestination || Vector3.Distance(agent.Transform.position, agent.Destination) < stoppingDistanceToFood.value)
             {
-                if (hasValidDestination && agent.ReachedDestination) 
-                {
-                    EndAction();
-                    return;
-                }
-                else if(!hasValidDestination)
+                EndAction(true);
+            }
+            else
+            {
+                var distance = Vector3.Distance(lastPosition, agent.Transform.position);
+                if (distance < .01f &&
+                    Time.realtimeSinceStartup - lastPositionChangeTime > wanderFailureTimeout.value)
                 {
                     EndAction(false);
-                    return;
                 }
-            }
 
-            var distance = Vector3.Distance(lastPosition, agent.Transform.position);
-            if (distance < .01f && Time.realtimeSinceStartup - lastPositionChangeTime > wanderFailureTimeout.value)
-            {
-                EndAction(false);
-                return;
-            }
-
-            if (distance > .01f)
-            {
-                lastPosition = agent.Transform.position;
-                lastPositionChangeTime = Time.realtimeSinceStartup;
+                if (distance > .01f)
+                {
+                    lastPosition = agent.Transform.position;
+                    lastPositionChangeTime = Time.realtimeSinceStartup;
+                }
             }
         }
 
